@@ -2,18 +2,25 @@ import numpy as np
 import pandas as pd 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from tensorflow.keras.datasets import mnist
 
 # Import Test/Training data
-df_test = pd.read_csv('/kaggle/input/digit-recognizer/test.csv')
-df_train = pd.read_csv('/kaggle/input/digit-recognizer/train.csv')
-df_train.head()
+(X_train, Y_train), (X_test, Y_test) = mnist.load_data()
+X_train.head()
 
 # Preview of Data
-df_train.info()
-df_train.describe()
+X_train.info()
+X_train.describe()
+Y_train.info()
+Y_train.describe()
+
+sample = 5 # Interchangeable 
+image = X_train[sample]
+plt.imshow(image, cmap='gray')
+plt.show()
 
 # Matrix of Training Data
-df_train = np.array(df_train)
-m,n = df_train.shape
+X_train = np.array(X_train)
+m,n = X_train.shape
 
 # Image Preview
