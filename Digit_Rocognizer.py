@@ -23,4 +23,19 @@ plt.show()
 X_train = np.array(X_train)
 m,n = X_train.shape
 
-# Image Preview
+# Propagation
+def fowardprop():
+  
+  return()
+
+def backprop():
+  return()
+
+def softmax():
+  return()
+
+def ReLu():
+
+  return()
+
+
