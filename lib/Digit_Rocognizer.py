@@ -36,7 +36,7 @@ def ReLu(Z):
   return(np.maximum(0,Z))
 
 def SoftMax(Z):
-  return(exp(Z) / np.sum(exp(Z)))
+  return(np.exp(Z) / np.sum.exp(Z))
 
 def derv_ReLu(Z):
   return(Z > 0)
@@ -49,7 +49,7 @@ def fowardprop(W1, W2, b1, b2, X):
   A2 = SoftMax(Z2)
   return(A2, A1, Z2, Z1)
 
-def backprop(W1, W2, A1, A2, X_act, X):
+def backprop(W1, W2, A1, A2, Z1, X_act, X):
   m = X_act.size
   # Second Layer
   dz2 = A2 - X_act
@@ -70,20 +70,23 @@ def Update(W1, W2, b1, b2, dw1, dw2, db1, db2, lr):
   return(new_W1, new_W2, new_b1, new_b2)
 
 # Gradient Decent
-def ArgMax(A2):
-
-  return(preditcions)
+def Get_pred(A2):
+  return(np.argmax(A2,0))
 
 def Pred_accuracy(predictions, test_data):
   print(predictions, test_data)
   return(np.sum(predictions == test_data) / test_data.size)
 
 def Gradient_decent(train_data, test_data, iterations):
-  W1, W2, b1, b2 = _init_()
+  W1, W2, b1, b2, lr = _init_()
   for i in range(iterations):
     A2, A1, Z2, Z1 = fowardprop(W1, W2, b1, b2, train_data)
     dw1, dw2, db1, db2 = backprop(W1, W2, A1, A2, test_data, train_data)
     W1, W2, b1, b2 = Update(W1, W2, b1, b2, dw1, dw2, db1, db2, lr)
-    for (i % 10 == 0):
+    if (i % 10 == 0):
       print("Iteration: ", i)
-      print("Accuracy: ", Pred_accuracy())
+      print("Accuracy: ", Pred_accuracy(Get_pred(A2)))
+  return(W1, W2, b1, b2)
+
+# Running Model
+W1, W2, b1, b2 = Gradient_decent(X_train, Y_train, 500)
