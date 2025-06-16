@@ -27,9 +27,9 @@ m,n = X_train.shape
 
 def _init_():
   W1 = np.random.randn(10,700) * 0.01
-  b1 = 0
+  b2 = np.zeros((700, 1))
   W2 = np.random.randn(10,700) * 0.01
-  b2 = 0
+  b2 = np.zeros((10, 1))
   lr = 0.1 # Learning Rate
   return(W1, W2, b1, b2, lr)
 
