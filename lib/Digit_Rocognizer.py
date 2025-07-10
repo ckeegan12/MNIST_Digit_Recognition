@@ -16,41 +16,29 @@ m,n = X_train.shape
 
 def _init_():
   hidden_units = 128  
-  W1 = np.random.randn(784, hidden_units) * 0.01  
-  b1 = np.zeros((hidden_units, 1))
-  W2 = np.random.randn(10, hidden_units) * 0.01 
-  b2 = np.zeros((10, 1))
+  W1 = np.random.rand(784, hidden_units) - 0.5  
+  b1 = np.random.rand(hidden_units, 1)
+  W2 = np.random.rand(10, hidden_units) - 0.5
+  b2 = np.random.rand(10, 1)
   lr = 0.1  # Learning Rate
   return (W1, W2, b1, b2, lr)
 
 # Functions 
 def ReLu(Z):
-  return(np.maximum(0,Z))
+  return(np.maximum(Z,0))
 
 def SoftMax(x):
-  exp_x = np.exp(x - np.max(x))
-  return exp_x / exp_x.sum(axis=1, keepdims=True)
+    exp_x = np.exp(x - np.max(x, axis=1, keepdims=True)) 
+    return exp_x / np.sum(exp_x, axis=1, keepdims=True)
 
 def derv_ReLu(Z):
-  return(Z > 0).astype(float)
-
-def cross_entropy_loss(Y,O):
-  # Y: vector form of actual labels 10x10
-  # O: vector form of SftMax output
-  predicted = np.log(O + 1e-15)
-  loss = -np.sum(np.matmul(Y,predicted.T)) / Y.shape[0]
-  return loss
+  return(Z > 0)
 
 def one_hot(Y):
-    if np.isscalar(Y):  # Check if Y is a single scalar value
-        one_hot_Y = np.zeros((1, 10))  # Create a 1x10 matrix
-        one_hot_Y[0, Y] = 1  
-    else:
-        one_hot_Y = np.zeros((Y.size, Y.max() + 1))  # For batch input
-        one_hot_Y[np.arange(Y.size), Y] = 1
-        one_hot_Y = one_hot_Y.T  # Transpose to shape (10, n)
-    
-    return one_hot_Y
+  one_hot_Y = np.zeros((Y.size, Y.max() + 1))  # For batch input
+  one_hot_Y[np.arange(Y.size), Y] = 1
+  one_hot_Y = one_hot_Y.T  # Transpose to shape (10, n) 
+  return one_hot_Y
 
 # Function derivatives
 def derv_ReLu(X):
@@ -62,7 +50,6 @@ def derv_loss(observed, predicted):
 
 # Propagation
 def fowardprop(W1, W2, b1, b2, X):
-  X = X.reshape(1, -1)  # Reshape X to (1, 784)
   Z1 = np.matmul(X, W1) + b1.T  # Shape (1, hidden_units)
   A1 = ReLu(Z1)
   Z2 = np.matmul(A1, W2.T) + b2.T  # Shape (1, 10)
@@ -74,12 +61,11 @@ def backprop(W2, A1, A2, Z1, Y, input):
   # Y: Actual value
   n = int(A1.shape[0])
   Y_one_hot = one_hot(Y)
-  input = input.reshape(1, -1) # shape (1x784)
   
   # Second Layer
-  dZ2 = derv_loss(Y_one_hot, A2).T  # Shape (1, 10)
+  dZ2 = derv_loss(Y_one_hot, A2.T)  # Shape (samples, 10)
   dw2 = dZ2.dot(A1) / n # Shape (10, hidden_units)
-  db2 = np.sum(dZ2, axis=0, keepdims=True) / n # Shape (1, 10)
+  db2 = np.sum(dZ2.T, axis=0, keepdims=True) / n # Shape (1, 10)
 
   # First Layer
   dZ1 = dZ2.T.dot(W2) * derv_ReLu(Z1)  # Shape (1, hidden_units)
@@ -98,25 +84,23 @@ def Update(W1, W2, b1, b2, dw1, dw2, db1, db2, lr):
 
 # Gradient Decent
 def Get_pred(A2):
-  return(np.argmax(A2))
+  return(np.argmax(A2, axis=1))
 
 def Pred_accuracy(predictions, test_data):
-  return(np.sum(predictions == one_hot(test_data)) / test_data.size)
+  print(predictions, test_data)
+  return((np.sum(predictions == test_data) / test_data.size) * 100)
 
 def Gradient_decent(train_data, train_labels, iterations):
   W1, W2, b1, b2, lr= _init_()
   for i in range(iterations):
-    predictions = []
-    for j in range(train_data.shape[0]):
-      A2, A1, Z1 = fowardprop(W1, W2, b1, b2, train_data[j,:])
-      dw1, dw2, db1, db2 = backprop(W2, A1, A2, Z1, train_labels[j], train_data[j,:])
-      W1, W2, b1, b2 = Update(W1, W2, b1, b2, dw1, dw2, db1, db2, lr)
-      num_i = Get_pred(A2)
-      predictions = np.append(predictions, num_i)
-      predictions.reshape(-1,1)
-    if (i % 2 == 0):
+    prediction = []
+    A2, A1, Z1 = fowardprop(W1, W2, b1, b2, train_data)
+    dw1, dw2, db1, db2 = backprop(W2, A1, A2, Z1, train_labels, train_data)
+    W1, W2, b1, b2 = Update(W1, W2, b1, b2, dw1, dw2, db1, db2, lr)
+    if (i % 10 == 0):
       print(f"Iteration: {i}")
-      print(f"Accuracy: {Pred_accuracy(predictions, train_labels):.2f}%")
+      prediction = np.append(prediction, Get_pred(A2))
+      print(f"Accuracy: {Pred_accuracy(prediction, train_labels):.2f}%")
   return(W1, W2, b1, b2)
 
 # Running Model
