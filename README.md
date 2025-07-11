@@ -65,7 +65,7 @@ m = Batch size
   - Shape: $10 \times m$
   
 - **Weight ($W^{[2]}$)**:
-  - Shape: $10 \times hiddenunits$ (as $W^{[2]} A^{[1]} \sim Z^{[2]}$)
+  - Shape: $10 \times hiddenunits$ (as $A^{[1]}W^{[2]} \sim Z^{[2]}$)
   
 - **Bias ($b^{[2]}$)**:
   - Shape: $10 \times 1$
