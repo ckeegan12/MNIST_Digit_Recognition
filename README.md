@@ -45,7 +45,7 @@ Update the weights and biases using the following equations:
 
 ## Variable Shapes
 
-m = # of Digits in Set
+m = Batch size
 
 ### Forward Propagation
 
