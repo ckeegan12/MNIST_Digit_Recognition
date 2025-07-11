@@ -1,5 +1,5 @@
 # MNIST Neural Network Digit Recognizer 
-This is a deep-learning neural network. It uses the ReLu activation and SoftMax function to predict handwritten digits. there are two layers in the model with 128 nodes in each. It is able to predict a hand written digit by propagating the input pixel data with a series of weigths and bias terms that are later updated in gradient decent.
+This is a deep-learning neural network. It uses the ReLu activation and SoftMax function to predict handwritten digits. It is a three layer model with one hidden layer with 128 nodes. It is able to predict a hand written digit by propagating the input pixel data with a series of weigths and bias terms that are later updated in gradient decent.
 
 <img align="center" width="655" height="325" alt="MNIST_dataset_example" src="https://github.com/user-attachments/assets/79a0a308-f300-424d-942e-e2cbda2a9446" />
 
