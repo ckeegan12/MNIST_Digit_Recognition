@@ -38,20 +38,29 @@ class CNN_Net(nn.Module):
     def classify(self, x):
         return F.softmax(x, dim=1)
 
+model_fp32 = CNN_Net()
+model_state_dict = torch.load('mnist_cnn_model.pth', map_location='cpu')
+model_fp32.load_state_dict(model_state_dict)
 
-model = CNN_Net()
-model_fp32 = torch.load('mnist_cnn_model.pth')
-model_fp32.eval() 
+# Print layer names
+for key in model_state_dict.keys():
+  print(key)
 
-# Model quantization fp32 -> int8
-converter = tf.lite.TFLiteConverter.from_saved_model('cnn_fp32_model')
-converter.optimizations = [tf.lite.Optimize.DEFAULT] # Convert weights to int8
-converter.target_spec.supported_types = [tf.float32]
-converter.inference_input_type = tf.float32  # Keep input in FP32
-converter.inference_output_type = tf.float32  # Keep output in FP32
+# Load models weights and bias tensors from state dictionary
+weight_0 = model_state_dict['model.0.weight']
+weight_3 = model_state_dict['model.3.weight']
+weight_6 = model_state_dict['model.6.weight']
+weight_10 = model_state_dict['model.10.weight']
+weight_13 = model_state_dict['model.13.weight']
+weight_16 = model_state_dict['model.16.weight']
 
-model_int8 = converter.convert()
+bias_0 = model_state_dict['model.0.bias']
+bias_3 = model_state_dict['model.3.bias']
+bias_6 = model_state_dict['model.6.bias']
+bias_10 = model_state_dict['model.10.bias']
+bias_13 = model_state_dict['model.13.bias']
+bias_16 = model_state_dict['model.16.bias']
 
-# Save quantized model
-with open('cnn_int8_model.tflite', 'wb') as f:
-  f.write(model_int8)
+model_fp32.eval()
+
+print("Model Load Sucessful")
