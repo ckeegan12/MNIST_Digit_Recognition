@@ -64,3 +64,8 @@ bias_16 = model_state_dict['model.16.bias']
 model_fp32.eval()
 
 print("Model Load Sucessful")
+
+print(f"{weight_0}\n{weight_3}\n{weight_6}\n{weight_10}\n{weight_13}\n{weight_16}\n")
+print("all weight tensors shown")
+print(f"{bias_0}\n{bias_3}\n{bias_6}\n{bias_10}\n{bias_13}\n{bias_16}\n")
+print("all bias tensors shown")
