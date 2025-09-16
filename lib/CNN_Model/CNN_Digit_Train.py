@@ -10,7 +10,7 @@ from torchvision import datasets, transforms
 
 # Hyper parameters
 train_loss_list = []
-epochs = 20
+epochs = 50
 lr = 0.01
 batchsize = 64
 
@@ -65,10 +65,8 @@ class CNN_Net(nn.Module):
             nn.Flatten(),
             nn.Linear(9 * 3 * 3, 128),
             nn.ReLU(),
-            nn.Dropout(0.5),
             nn.Linear(128, 64),
             nn.ReLU(),
-            nn.Dropout(0.5),
             nn.Linear(64, 10)
         )
 
@@ -85,7 +83,8 @@ optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=0.01)
 criterion = nn.CrossEntropyLoss()
 
 size = len(train_loader)
-print("Start Training")
+print(f"Start Training for {epochs} epochs")
+
 for epoch in range(epochs):
     print(f"training cycle: {epoch}")
     model.train()

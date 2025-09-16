@@ -25,10 +25,8 @@ class CNN_Net(nn.Module):
             nn.Flatten(),
             nn.Linear(9 * 3 * 3, 128),
             nn.ReLU(),
-            nn.Dropout(0.5),
             nn.Linear(128, 64),
             nn.ReLU(),
-            nn.Dropout(0.5),
             nn.Linear(64, 10)
           )
 
