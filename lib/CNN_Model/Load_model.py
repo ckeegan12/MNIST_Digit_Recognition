@@ -3,11 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 import tensorflow as tf
 
+
 class CNN_Net(nn.Module):
     def __init__(self):
-        super(CNN_Net, self).__init__() 
+        super(CNN_Net, self).__init__()
         self.model = nn.Sequential(
-          # Convolution layers
+            # Convolution layers
             nn.Conv2d(in_channels=1, out_channels=3,
                             kernel_size=3, padding=1),
             nn.ReLU(),
@@ -28,7 +29,7 @@ class CNN_Net(nn.Module):
             nn.Linear(128, 64),
             nn.ReLU(),
             nn.Linear(64, 10)
-          )
+        )
 
     def forward(self, x):
         return self.model(x)
@@ -38,7 +39,7 @@ class CNN_Net(nn.Module):
 
 model_fp32 = CNN_Net()
 model_state_dict = torch.load('mnist_cnn_model.pth', map_location='cpu')
-model_fp32.load_state_dict(model_state_dict)
+model_fp32.load_state_dict(model_state_dict, strict=False)
 
 # Print layer names
 for key in model_state_dict.keys():
