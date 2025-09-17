@@ -9,6 +9,7 @@ import torch.nn.functional as F
 from torchvision import datasets, transforms
 
 # Hyper parameters
+epoch_losses = []
 train_loss_list = []
 epochs = 50
 lr = 0.01
@@ -104,11 +105,15 @@ for epoch in range(epochs):
         loss.backward()
         optimizer.step()
 
-        train_loss = loss.item() / len(train_loader)
-        train_loss_list.append(train_loss)
+        epoch_losses.append(loss.item())
 
         if (i % 100) == 0:
             print(f'Epoch {epoch}, Step {i+1}, Loss: {loss.item():.4f}')
+
+    # Calculate average for this epoch only
+    epoch_loss = sum(epoch_losses) / len(epoch_losses)
+    train_loss_list.append(epoch_loss)  # One value per epoch
+    print(f'Epoch [{epoch+1}/{epochs}], Average Loss: {epoch_loss:.4f}')
 
 print("Training Finished")
 

@@ -44,26 +44,8 @@ model_fp32.load_state_dict(model_state_dict)
 for key in model_state_dict.keys():
   print(key)
 
-# Load models weights and bias tensors from state dictionary
-weight_0 = model_state_dict['model.0.weight']
-weight_3 = model_state_dict['model.3.weight']
-weight_6 = model_state_dict['model.6.weight']
-weight_10 = model_state_dict['model.10.weight']
-weight_13 = model_state_dict['model.13.weight']
-weight_16 = model_state_dict['model.16.weight']
-
-bias_0 = model_state_dict['model.0.bias']
-bias_3 = model_state_dict['model.3.bias']
-bias_6 = model_state_dict['model.6.bias']
-bias_10 = model_state_dict['model.10.bias']
-bias_13 = model_state_dict['model.13.bias']
-bias_16 = model_state_dict['model.16.bias']
-
 model_fp32.eval()
 
 print("Model Load Sucessful")
 
-print(f"{weight_0}\n{weight_3}\n{weight_6}\n{weight_10}\n{weight_13}\n{weight_16}\n")
-print("all weight tensors shown")
-print(f"{bias_0}\n{bias_3}\n{bias_6}\n{bias_10}\n{bias_13}\n{bias_16}\n")
-print("all bias tensors shown")
+
