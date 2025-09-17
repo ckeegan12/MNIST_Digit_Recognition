@@ -17,32 +17,36 @@ batchsize = 64
 
 # Model device assignment
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+class Load_data:
+    ### Load data frames
+    def data_sets(self):
+        transform = transforms.Compose(
+            [transforms.ToTensor(),
+            transforms.Normalize((0.1307,), (0.3081,))]
+        )
 
-### Load data frames
-transform = transforms.Compose(
-    [transforms.ToTensor(),
-    transforms.Normalize((0.1307,), (0.3081,))]
-)
+        train_dataset = torchvision.datasets.MNIST(
+                root='./data',        
+                train=True,           
+                download=True,        
+                transform=transform  
+        )
 
-train_dataset = torchvision.datasets.MNIST(
-        root='./data',        
-        train=True,           
-        download=True,        
-        transform=transform  
-)
+        test_dataset = torchvision.datasets.MNIST(
+                root='./data',        
+                train=False,           
+                download=True,        
+                transform=transform
+        )
 
-test_dataset = torchvision.datasets.MNIST(
-        root='./data',        
-        train=False,           
-        download=True,        
-        transform=transform
-)
+        train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batchsize,
+                                                shuffle=True)
 
-train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batchsize,
-                                           shuffle=True)
-
-test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batchsize,
-                                           shuffle=False)
+        test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batchsize,
+                                                shuffle=False)
+        return train_loader, test_loader
+    
+train_loader, test_loader = Load_data.data_sets()
 
 class CNN_Net(nn.Module):
     def __init__(self):
